@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <!--mode:treegrid/"",relationship仅在model=treegrid时有效-->
+  <fileInfo title="接送机订单汇总" sheetName="接送机订单" mode="" relationship="" rowHeight="20"/>
+  <columns>
+    <column index="0" isNumberColumn="true" header="序号" width="6"/>
+    <column index="2" header="下单时间" name="CreateTime" width="20"/>
+    <column index="1" header="订单号" name="OrderId" width="22"/>
+    <column index="3" header="下单部门" name="DepartmentName" width="30"/>
+    <column index="4" header="下单人" name="CreatorName" width="30"/>
+    <column index="5" header="用车类型" name="OrderType" width="12"/>
+    <column index="6" header="航班/火车" name="FlightNumber" width="10"/>
+    <column index="7" header="用车时间" name="UseTime" width="20"/>
+    <column index="8" header="出发地" name="Starting" width="30"/>
+    <column index="9" header="目的地" name="Destination" width="30"/>
+    <column index="10" header="人数" name="PeopleNumber" width="8"/>
+    <column index="12" header="订单状态" name="OrderState" width="12"/>
+    <column index="14" header="金额" name="Price" width="10"/>
+  </columns>
+</configuration>

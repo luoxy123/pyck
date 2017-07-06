@@ -12,7 +12,7 @@ namespace ExcelDemo
 
         public string CityName { get; set; }
 
-        public DateTime CreateTime { get; set; }
+        public string CreateTime { get; set; }
 
         public string CreatorName { get; set; }
 
@@ -27,10 +27,10 @@ namespace ExcelDemo
         public string OrderState { get; set; }
 
 
-        public int PeopleNumber { get; set; }
+        public string PeopleNumber { get; set; }
 
 
-        public int Price { get; set; }
+        public string Price { get; set; }
         public string ReadState { get; set; }
 
 
@@ -43,7 +43,7 @@ namespace ExcelDemo
         public string Destination { get; set; }
 
 
-        public DateTime UseTime { get; set; }
+        public string UseTime { get; set; }
 
         public string FlighTime { get; set; }
     }

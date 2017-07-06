@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using Npoi.Core.HPSF;
 using Npoi.Core.HSSF.UserModel;
@@ -85,20 +86,86 @@ namespace ExcelDemo.Unitity
                 CreateNewRow(_workbook, newsheet, rowIndex, dr, _config);
                 rowIndex++;
             }
-            var cellStyle = _workbook.CreateCellStyle();
-            cellStyle.VerticalAlignment = VerticalAlignment.Center;
-            cellStyle.Alignment = HorizontalAlignment.Center;
-            for (int i = 0; i < _config.Cells.Count; i++)
+
+            if (_config.IsMerge)
             {
-                if (i >= 3)
+                for (int i = 0; i < _config.Cells.Count; i++)
                 {
-                    newsheet.AddMergedRegion(new CellRangeAddress(2, newsheet.LastRowNum, i, i));
-                    newsheet.SetDefaultColumnStyle(i, cellStyle);
+                    if (_config.Cells[i].IsMerge)
+                    {
+                        MergeCells(newsheet, i, 2, newsheet.LastRowNum, _workbook);
+                    }
+
                 }
-               
+            }
+        }
+
+        private static void MergeCells(ISheet newsheet,int cellLine,int startRow,int endRow,IWorkbook workbook)
+        {
+            ICellStyle style = workbook.CreateCellStyle();
+            style.Alignment= HorizontalAlignment.Center;
+            style.VerticalAlignment= VerticalAlignment.Center;
+            var startRowValue = newsheet.GetRow(startRow).GetCell(cellLine).StringCellValue;
+            int count = 0;
+            var flag = false;
+            for (var i = startRow + 1; i <= endRow; i++)//从开始行的下一行循环判断
+            {
+                newsheet.GetRow(i).GetCell(cellLine).SetCellType(CellType.String);
+                var sCurrent = newsheet.GetRow(i).GetCell(cellLine).StringCellValue;
+                if (startRowValue == sCurrent)
+                {
+                    sCurrent = startRowValue;
+                    if (flag)
+                    {
+                        newsheet.AddMergedRegion(new CellRangeAddress(startRow-count,startRow,cellLine,cellLine));
+                        var row = newsheet.GetRow(startRow - count);
+                        if (newsheet.GetRow(startRow - count).GetCell(cellLine) != null)
+                        {
+                            newsheet.GetRow(i).GetCell(cellLine).SetCellType(CellType.String);
+                            string cellValue = newsheet.GetRow(startRow - count).GetCell(cellLine).StringCellValue;
+                            var cell = row.CreateCell(cellLine);
+                            cell.SetCellValue(cellValue);
+                            cell.CellStyle = style;
+                        }
+                        count = 0;
+                        flag = false;
+                    }
+                    startRow = i;
+                    count++;
+                }
+                else
+                {
+                    flag = true;
+                    startRowValue = sCurrent;
+                }
+                if (i == endRow && count > 0)
+                {
+                    newsheet.AddMergedRegion(new CellRangeAddress(startRow - count, startRow, cellLine, cellLine));
+                    var row = newsheet.GetRow(startRow - count);
+                    if (newsheet.GetRow(startRow - count).GetCell(cellLine) != null)
+                    {
+                        newsheet.GetRow(i).GetCell(cellLine).SetCellType(CellType.String);
+                        string cellValue = newsheet.GetRow(startRow - count).GetCell(cellLine).StringCellValue;
+                        var cell = row.CreateCell(cellLine);
+                        cell.SetCellValue(cellValue);
+                        cell.CellStyle = style;
+                    }
+                    if (newsheet.GetRow(i)
+                        .GetCell(cellLine)
+                        .StringCellValue.Equals(newsheet.GetRow(i).GetCell(cellLine).StringCellValue))
+                    {
+                        newsheet.AddMergedRegion(new CellRangeAddress(endRow - count, endRow, cellLine, cellLine));
+                        var cellValue = newsheet.GetRow(startRow - count).GetCell(cellLine).StringCellValue;
+                        var row2 = newsheet.GetRow(startRow - count);
+                        var cell2 = row2.CreateCell(cellLine);
+                        cell2.SetCellValue(cellValue);
+                        cell2.CellStyle = style;
+                    }
+                }
             }
 
-        }
+        } 
+
 
 
         private void CreateNewRow(IWorkbook workbook, ISheet newsheet, int rowIndex, TSource dr, ExportConfigure config)

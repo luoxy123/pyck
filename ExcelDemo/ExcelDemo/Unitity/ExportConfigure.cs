@@ -37,5 +37,8 @@ namespace ExcelDemo.Unitity
         public short RowHeight { get; set; }
 
         public IList<CellInfo> Cells { get; set; }
+
+        public bool IsMerge { get; set; }
+
     }
 }

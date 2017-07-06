@@ -40,8 +40,10 @@ namespace ExcelDemo.Unitity
             config.Relationship = GetAttributeValue(xmlNode, "relationship");
             config.SheetName = string.IsNullOrEmpty(config.SheetName) ? GetAttributeValue(xmlNode, "sheetName") : config.SheetName;
             var strRowHeight = GetAttributeValue(xmlNode, "rowHeight");
+            var strMerge = GetAttributeValue(xmlNode, "IsMerge");
             config.RowHeight = string.IsNullOrEmpty(strRowHeight) ? short.MinValue : short.Parse(strRowHeight);
-
+            config.IsMerge = !string.IsNullOrEmpty(strMerge) && bool.Parse(strMerge);
+            
             #region 读取列表内容配置信息
 
             var nodes = GetSingleNode(doc, "configuration/columns");
@@ -69,11 +71,14 @@ namespace ExcelDemo.Unitity
                 var strIsNumberColumn = GetAttributeValue(n, "isNumberColumn");
                 var isNumberColumn = !string.IsNullOrEmpty(strIsNumberColumn) && bool.Parse(strIsNumberColumn);
 
+                var strIsMerge = GetAttributeValue(n, "IsMerge");
+                var isMerge = !string.IsNullOrEmpty(strIsMerge) && bool.Parse(strIsMerge);
+
                 if (isNumberColumn)
                 {
                     //propertoryName = ExcelExportTemplate.NumColumnPropertoryName;
                 }
-                var cell = new CellInfo(propertoryName, header, colIndex, formula, width, isNumberColumn);
+                var cell = new CellInfo(propertoryName, header, colIndex, formula, width, isNumberColumn, isMerge);
                 config.Cells.Add(cell);
             }
 

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <!--mode:treegrid/"",relationship仅在model=treegrid时有效-->
-  <fileInfo title="接送机订单汇总" sheetName="接送机订单" mode="" relationship="" rowHeight="20" IsMerge="True"/>
+  <fileInfo title="接送机订单汇总" sheetName="接送机订单" mode="" relationship="" rowHeight="20" IsMerge="False"/>
   <columns>
     <column index="0" isNumberColumn="true" header="序号" width="6"/>
     <column index="2" header="下单时间" name="CreateTime" width="20"/>
